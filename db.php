@@ -1,12 +1,7 @@
 <?php
-$host = "localhost";
-$user = "root";
-$password = "";
-$dbname = "inventory_db";
-
-$conn = mysqli_connect($host, $user, $password, $dbname);
+$conn = mysqli_connect("localhost", "root", "", "inventory_db");
 
 if (!$conn) {
-    die("Database connection failed: " . mysqli_connect_error());
+    die("Connection Failed");
 }
 ?>
