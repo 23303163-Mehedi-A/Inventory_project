@@ -2,7 +2,7 @@
 session_start();
 $page_title = 'Add Product';
 $active_nav = 'add_product';
-require '_layout.php';
+require 'layout.php';
 
 $msg = $err = '';
 $form = ['name'=>'','category'=>'','price'=>'','quantity'=>'','min_qty'=>'5','supplier'=>'','description'=>''];

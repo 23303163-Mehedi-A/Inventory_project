@@ -2,7 +2,7 @@
 session_start();
 $page_title = 'Dashboard';
 $active_nav = 'dashboard';
-require '_layout.php';
+require 'layout.php';
 
 // ── Stats ──────────────────────────────────────────────────
 $total_products  = (int)$conn->query("SELECT COUNT(*) AS c FROM products")->fetch_assoc()['c'];

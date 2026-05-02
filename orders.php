@@ -2,7 +2,7 @@
 session_start();
 $page_title = 'Orders';
 $active_nav = 'orders';
-require '_layout.php';
+require 'layout.php';
 
 $msg = $err = '';
 
