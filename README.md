@@ -1,56 +1,85 @@
-# Inventory Project
+# 🛠️ Inventory Management System — The Tool Master BD
 
-This is a simple inventory management system built with PHP and MySQL.
+A complete web-based inventory and order management system built with PHP and MySQL.  
+Designed for managing products, tracking orders, and handling customers efficiently.
 
-🚀 Features
-🔐 Authentication System
-Admin/Staff login system
-Customer login & signup
-Secure password hashing
-Session-based authentication
-Role-based access (Admin vs Customer)
-📦 Inventory Management
-Add, edit, and delete products
-Track product quantity and minimum stock
-Low stock alert system
-Inventory value calculation
-🧾 Order Management
-Create and manage orders
-Order status tracking:
-Pending
-Completed
-Delivered
-Cancelled
-Admin can view all orders
-Customers can view their own orders
-Order items summary (with quantity)
-📊 Dashboard (Admin Panel)
-Total products, orders, customers
-Inventory value overview
-Revenue calculation
-Pending & delivered order counts
-Recent orders display
-Low stock warnings
-👤 Customer Features
-Browse products (shop page)
-Place orders
-View order history
-Order progress tracker (visual steps)
-🎨 UI / UX
-Modern responsive design
-Clean dashboard layout
-Status badges (color-coded)
-Progress tracker for delivery
-Alert notifications (success, warning, error)
-📍 Contact & Info Pages
-Company contact information
-Multiple office locations
-(Optional) Google Maps integration
-⚙️ Tech Stack
-PHP (Core PHP, no framework)
-MySQL (Database)
-HTML, CSS (Custom UI)
-Apache Server (XAMPP / Localhost)
+---
+
+## 🚀 Features
+
+### 🔐 Authentication System
+- Secure login for Admin/Staff and Customers
+- Password hashing for security
+- Session-based authentication
+- Role-based access control
+
+---
+
+### 📦 Inventory Management
+- Add, update, and delete products
+- Track product quantity and minimum stock levels
+- Automatic low stock alerts
+- Inventory value calculation
+
+---
+
+### 🧾 Order Management
+- Create and manage customer orders
+- Order status tracking:
+  - Pending
+  - Completed
+  - Delivered
+  - Cancelled
+- Admin can view all orders
+- Customers can view their own orders
+- Order item summary with quantity
+
+---
+
+### 📊 Admin Dashboard
+- Total products, orders, and customers overview
+- Inventory value summary
+- Revenue calculation (completed/delivered orders)
+- Pending & delivered order tracking
+- Recent orders display
+- Low stock alerts
+
+---
+
+### 👤 Customer Features
+- Browse products (shop page)
+- Place orders easily
+- View order history
+- Order progress tracker (visual steps)
+
+---
+
+### 🎨 User Interface
+- Modern responsive design
+- Clean dashboard layout
+- Color-coded status badges
+- Order progress tracker
+- Alert notifications (success, warning, error)
+
+---
+
+### 📍 Contact & Information
+- Company contact details page
+- Multiple office locations
+- Google Maps integration support
+
+---
+
+## ⚙️ Tech Stack
+
+- Backend: PHP (Core PHP)
+- Database: MySQL
+- Frontend: HTML, CSS
+- Server: Apache (XAMPP / Localhost)
+
+---
+
+
 
 ## How to run
 1. Install XAMPP
