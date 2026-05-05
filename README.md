@@ -81,10 +81,43 @@ Designed for managing products, tracking orders, and handling customers efficien
 
 
 
-## How to run
-1. Install XAMPP
-2. Start Apache and MySQL
-3. Create database: inventory_db
-4. Import database.sql
-5. Open:
-   http://localhost/inventory_project
+## 🛠️ How to Run This Project
+
+Follow these steps to set up and run the project locally:
+
+### 1. Install XAMPP
+Download and install XAMPP from:
+https://www.apachefriends.org
+
+---
+
+### 2. Start Server
+Open XAMPP Control Panel and start:
+- Apache
+- MySQL
+
+---
+
+### 3. Create Database
+- Open browser and go to: http://localhost/phpmyadmin
+- Create a new database named:inventory_db
+
+---
+
+### 4. Import Database
+- Select the `inventory_db` database
+- Click on **Import**
+- Choose the `database.sql` file from the project
+- Click **Go**
+
+---
+
+### 5. Setup Project Folder
+Move the project folder to:C:\xampp\htdocs\inventory_project
+
+---
+
+### 6. Run the Project
+Open your browser and visit:http://localhost/inventory_project
+
+---
