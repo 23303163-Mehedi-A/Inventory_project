@@ -79,6 +79,18 @@ Designed for managing products, tracking orders, and handling customers efficien
 
 ---
 
+## 📥 Clone the Repository
+
+Clone this project using Git:
+
+git clone https://github.com/ArefinRonok/inventory_project.git
+
+
+---
+
+## 🔥 Then update your setup flow like this:
+
+---
 
 
 ## 🛠️ How to Run This Project
