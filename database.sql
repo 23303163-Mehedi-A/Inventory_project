@@ -64,6 +64,7 @@ CREATE TABLE `products` (
   `min_qty` int(11) NOT NULL DEFAULT 5,
   `supplier` varchar(150) DEFAULT NULL,
   `description` text DEFAULT NULL,
+  `image_url` varchar(255) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -71,14 +72,14 @@ CREATE TABLE `products` (
 -- Dumping data for table `products`
 --
 
-INSERT INTO `products` (`id`, `name`, `category`, `price`, `quantity`, `min_qty`, `supplier`, `description`, `created_at`) VALUES
-(1, 'Power Drill 20V', 'Power Tools', 4500.00, 25, 5, 'Black & Decker BD', NULL, '2026-05-02 20:37:44'),
-(2, 'Circular Saw 7.25\"', 'Power Tools', 8200.00, 12, 3, 'Makita Distributor', NULL, '2026-05-02 20:37:44'),
-(3, 'Adjustable Wrench Set', 'Hand Tools', 1200.00, 40, 10, 'Stanley Tools BD', NULL, '2026-05-02 20:37:44'),
-(4, 'Measuring Tape 10m', 'Measuring', 350.00, 80, 20, 'Local Supplier', NULL, '2026-05-02 20:37:44'),
-(5, 'Safety Helmet', 'Safety Gear', 650.00, 4, 15, 'Safety First BD', NULL, '2026-05-02 20:37:44'),
-(6, 'Angle Grinder 4.5\"', 'Power Tools', 6800.00, 3, 5, 'Bosch BD', NULL, '2026-05-02 20:37:44'),
-(7, 'Table Fan', 'Electronics', 150000.00, 497, 130, '0', 'Need to be in Yellow color', '2026-05-02 20:56:25');
+INSERT INTO `products` (`id`, `name`, `category`, `price`, `quantity`, `min_qty`, `supplier`, `description`, `image_url`, `created_at`) VALUES
+(1, 'Power Drill 20V', 'Power Tools', 4500.00, 25, 5, 'Black & Decker BD', NULL, NULL, '2026-05-02 20:37:44'),
+(2, 'Circular Saw 7.25"', 'Power Tools', 8200.00, 12, 3, 'Makita Distributor', NULL, NULL, '2026-05-02 20:37:44'),
+(3, 'Adjustable Wrench Set', 'Hand Tools', 1200.00, 40, 10, 'Stanley Tools BD', NULL, NULL, '2026-05-02 20:37:44'),
+(4, 'Measuring Tape 10m', 'Measuring', 350.00, 80, 20, 'Local Supplier', NULL, NULL, '2026-05-02 20:37:44'),
+(5, 'Safety Helmet', 'Safety Gear', 650.00, 4, 15, 'Safety First BD', NULL, NULL, '2026-05-02 20:37:44'),
+(6, 'Angle Grinder 4.5"', 'Power Tools', 6800.00, 3, 5, 'Bosch BD', NULL, NULL, '2026-05-02 20:37:44'),
+(7, 'Table Fan', 'Electronics', 150000.00, 497, 130, '0', 'Need to be in Yellow color', NULL, '2026-05-02 20:56:25');
 
 -- --------------------------------------------------------
 

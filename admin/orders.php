@@ -1,37 +1,40 @@
 <?php
-if (isset($_SESSION['user_id'])) {
-    $page_title='Orders'; $active_nav='orders';
-    require 'layout.php';
-    $is_admin = true;
-} else {
-    $active_page='orders'; $page_title='My Orders';
-    require 'nav.php';
-    $is_admin = false;
+$base_path = '../';
+$page_title='Orders'; $active_nav='orders';
+require '../layout.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['order_id'], $_POST['order_action'])) {
+    $order_id = (int)$_POST['order_id'];
+    $action = $_POST['order_action'];
+    $status_map = [
+        'process' => 'completed',
+        'deliver' => 'delivered',
+        'cancel' => 'cancelled',
+    ];
+
+    if (isset($status_map[$action])) {
+        $new_status = $status_map[$action];
+        $stmt = $conn->prepare("UPDATE orders SET status=? WHERE id=?");
+        $stmt->bind_param("si", $new_status, $order_id);
+        $stmt->execute();
+        header("Location: /inventory_project/admin/orders.php?updated=1");
+        exit;
+    }
 }
 
-$success_order = $_GET['order'] ?? '';
-
-if ($is_admin) {
-    $orders = $conn->query("SELECT o.*, GROUP_CONCAT(oi.product_name, ' ×', oi.quantity SEPARATOR ', ') AS items FROM orders o LEFT JOIN order_items oi ON oi.order_id=o.id GROUP BY o.id ORDER BY o.created_at DESC");
-} else {
-    $orders=$conn->prepare("SELECT o.*, GROUP_CONCAT(oi.product_name, ' ×', oi.quantity SEPARATOR ', ') AS items FROM orders o LEFT JOIN order_items oi ON oi.order_id=o.id WHERE o.customer_id=? GROUP BY o.id ORDER BY o.created_at DESC");
-    $orders->bind_param("i",$cust_id);$orders->execute();
-    $orders=$orders->get_result();
-}
+$orders = $conn->query("SELECT o.*, GROUP_CONCAT(oi.product_name, ' ×', oi.quantity SEPARATOR ', ') AS items FROM orders o LEFT JOIN order_items oi ON oi.order_id=o.id GROUP BY o.id ORDER BY o.created_at DESC");
 
 function sb($s){$m=['pending'=>'b-amber','completed'=>'b-blue','delivered'=>'b-green','cancelled'=>'b-red'];return"<span class='badge ".($m[$s]??'b-gray')."'>".ucfirst($s)."</span>";}
 function step($status){$steps=['pending'=>1,'completed'=>2,'delivered'=>3,'cancelled'=>0];return$steps[$status]??0;}
 ?>
 
-<?php if(!$is_admin): ?><div class="cust-page"><?php endif; ?>
+<div style="margin-bottom:20px"><h2 style="font-size:20px;font-weight:800">📦 All Orders</h2></div>
 
-<?php if($success_order):?>
+<?php if(isset($_GET['updated'])):?>
 <div class="alert alert-success" style="font-size:15px">
-  🎉 <strong>Order placed successfully!</strong> Your order <strong><?=htmlspecialchars($success_order)?></strong> is being processed.
+  ✅ Order status updated successfully.
 </div>
 <?php endif;?>
-
-<div style="margin-bottom:20px"><h2 style="font-size:20px;font-weight:800">📦 My Orders</h2></div>
 
 <?php if($orders->num_rows>0):?>
 <div style="display:flex;flex-direction:column;gap:16px">
@@ -43,6 +46,7 @@ function step($status){$steps=['pending'=>1,'completed'=>2,'delivered'=>3,'cance
     <div>
       <span class="td-id" style="font-size:14px;font-weight:700;color:var(--accent)"><?=htmlspecialchars($o['order_no'])?></span>
       <span style="margin-left:12px"><?=sb($o['status'])?></span>
+      <span style="margin-left:12px;font-size:13px;color:var(--text2)">👤 <?=htmlspecialchars($o['customer_name'])?></span>
     </div>
     <div style="font-size:12px;color:var(--text3)"><?=date('d M Y, h:i A',strtotime($o['created_at']))?></div>
   </div>
@@ -54,12 +58,43 @@ function step($status){$steps=['pending'=>1,'completed'=>2,'delivered'=>3,'cance
         <?php if($o['address']):?>
         <div style="font-size:12px;color:var(--text3);margin-top:8px">📍 <?=htmlspecialchars($o['address'])?></div>
         <?php endif;?>
+        <?php if($o['customer_phone']):?>
+        <div style="font-size:12px;color:var(--text3)">📞 <?=htmlspecialchars($o['customer_phone'])?></div>
+        <?php endif;?>
+        <?php if($o['payment_method']):?>
+        <div style="font-size:12px;color:var(--text3);margin-top:4px">
+          <?=$o['payment_method']==='cash'?'💵 Cash on Delivery':'🏦 Bank Transfer'?>
+          <?php if($o['transaction_id']):?> — <?=htmlspecialchars($o['transaction_id'])?><?php endif;?>
+        </div>
+        <?php endif;?>
       </div>
       <div style="text-align:right">
         <div style="font-size:22px;font-weight:800;color:var(--accent)">৳<?=number_format((float)$o['total_price'],2)?></div>
         <div style="font-size:11px;color:var(--text3)">Total amount</div>
       </div>
     </div>
+
+    <?php if($o['status'] !== 'cancelled'): ?>
+    <div style="margin-top:16px;display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end">
+      <?php if($o['status']==='pending'): ?>
+      <form method="post" style="display:inline">
+        <input type="hidden" name="order_id" value="<?=htmlspecialchars($o['id'])?>">
+        <button type="submit" name="order_action" value="process" class="btn btn-sm btn-primary">Start Processing</button>
+      </form>
+      <form method="post" style="display:inline">
+        <input type="hidden" name="order_id" value="<?=htmlspecialchars($o['id'])?>">
+        <button type="submit" name="order_action" value="cancel" class="btn btn-sm btn-outline">Cancel Order</button>
+      </form>
+      <?php elseif($o['status']==='completed'): ?>
+      <form method="post" style="display:inline">
+        <input type="hidden" name="order_id" value="<?=htmlspecialchars($o['id'])?>">
+        <button type="submit" name="order_action" value="deliver" class="btn btn-sm btn-primary">Mark Delivered</button>
+      </form>
+      <?php elseif($o['status']==='delivered'): ?>
+      <span class="badge b-green">Delivered</span>
+      <?php endif; ?>
+    </div>
+    <?php endif; ?>
 
     <?php if($o['status']!=='cancelled'):?>
     <!-- Progress tracker -->
@@ -90,10 +125,9 @@ function step($status){$steps=['pending'=>1,'completed'=>2,'delivered'=>3,'cance
 <?php else:?>
 <div class="empty-state" style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:60px">
   <div class="ei">📦</div>
-  <p>You haven't placed any orders yet</p>
-  <a href="shop.php" class="btn btn-primary" style="margin-top:16px">Start Shopping →</a>
+  <p>No orders yet</p>
 </div>
 <?php endif;?>
 
-<?php if($is_admin): ?></div></div></div><?php endif; ?>
+</div></div></div>
 </body></html>

@@ -1,29 +1,19 @@
 <?php
-if (isset($_SESSION['user_id'])) {
-    $page_title='Orders'; $active_nav='orders';
-    require 'layout.php';
-    $is_admin = true;
-} else {
-    $active_page='orders'; $page_title='My Orders';
-    require 'nav.php';
-    $is_admin = false;
-}
+$base_path = '../';
+$active_page='orders'; $page_title='My Orders';
+require '../nav.php';
 
 $success_order = $_GET['order'] ?? '';
 
-if ($is_admin) {
-    $orders = $conn->query("SELECT o.*, GROUP_CONCAT(oi.product_name, ' ×', oi.quantity SEPARATOR ', ') AS items FROM orders o LEFT JOIN order_items oi ON oi.order_id=o.id GROUP BY o.id ORDER BY o.created_at DESC");
-} else {
-    $orders=$conn->prepare("SELECT o.*, GROUP_CONCAT(oi.product_name, ' ×', oi.quantity SEPARATOR ', ') AS items FROM orders o LEFT JOIN order_items oi ON oi.order_id=o.id WHERE o.customer_id=? GROUP BY o.id ORDER BY o.created_at DESC");
-    $orders->bind_param("i",$cust_id);$orders->execute();
-    $orders=$orders->get_result();
-}
+$orders=$conn->prepare("SELECT o.*, GROUP_CONCAT(oi.product_name, ' ×', oi.quantity SEPARATOR ', ') AS items FROM orders o LEFT JOIN order_items oi ON oi.order_id=o.id WHERE o.customer_id=? GROUP BY o.id ORDER BY o.created_at DESC");
+$orders->bind_param("i",$cust_id);$orders->execute();
+$orders=$orders->get_result();
 
 function sb($s){$m=['pending'=>'b-amber','completed'=>'b-blue','delivered'=>'b-green','cancelled'=>'b-red'];return"<span class='badge ".($m[$s]??'b-gray')."'>".ucfirst($s)."</span>";}
 function step($status){$steps=['pending'=>1,'completed'=>2,'delivered'=>3,'cancelled'=>0];return$steps[$status]??0;}
 ?>
 
-<?php if(!$is_admin): ?><div class="cust-page"><?php endif; ?>
+<div class="cust-page">
 
 <?php if($success_order):?>
 <div class="alert alert-success" style="font-size:15px">
@@ -53,6 +43,12 @@ function step($status){$steps=['pending'=>1,'completed'=>2,'delivered'=>3,'cance
         <div style="font-size:14px;font-weight:500"><?=htmlspecialchars($o['items']??'—')?></div>
         <?php if($o['address']):?>
         <div style="font-size:12px;color:var(--text3);margin-top:8px">📍 <?=htmlspecialchars($o['address'])?></div>
+        <?php endif;?>
+        <?php if($o['payment_method']):?>
+        <div style="font-size:12px;color:var(--text3);margin-top:4px">
+          <?=$o['payment_method']==='cash'?'💵 Cash on Delivery':'🏦 Bank Transfer'?>
+          <?php if($o['transaction_id']):?> — <?=htmlspecialchars($o['transaction_id'])?><?php endif;?>
+        </div>
         <?php endif;?>
       </div>
       <div style="text-align:right">
@@ -95,5 +91,5 @@ function step($status){$steps=['pending'=>1,'completed'=>2,'delivered'=>3,'cance
 </div>
 <?php endif;?>
 
-<?php if($is_admin): ?></div></div></div><?php endif; ?>
+</div></div></div>
 </body></html>
