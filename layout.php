@@ -1,17 +1,19 @@
 <?php
-// admin/_layout.php — include at top of every admin page after session_start()
+// layout.php — include at top of every admin page after session_start()
 // Requires: $page_title, $active_nav
 
 session_start();
 if (!isset($_SESSION['user_id'])) { header("Location: login.php"); exit; }
 
 require_once (isset($base_path) ? $base_path : '') . 'db.php';
+
 $page_title = $page_title ?? 'Dashboard';
 $active_nav = $active_nav ?? '';
 $user_name  = $_SESSION['user_name'] ?? 'Admin';
 $user_role  = $_SESSION['user_role'] ?? 'admin';
-$parts      = explode(' ', trim($user_name));
-$initials   = strtoupper(substr($parts[0],0,1)) . (isset($parts[1]) ? strtoupper(substr($parts[1],0,1)) : '');
+
+$parts    = explode(' ', trim($user_name));
+$initials = strtoupper(substr($parts[0],0,1)) . (isset($parts[1]) ? strtoupper(substr($parts[1],0,1)) : '');
 
 $low_stock     = (int)$conn->query("SELECT COUNT(*) AS c FROM products WHERE quantity <= min_qty")->fetch_assoc()['c'];
 $pending_orders= (int)$conn->query("SELECT COUNT(*) AS c FROM orders WHERE status='pending'")->fetch_assoc()['c'];
@@ -21,8 +23,10 @@ $pending_orders= (int)$conn->query("SELECT COUNT(*) AS c FROM orders WHERE statu
 <title><?= htmlspecialchars($page_title) ?> — Tool Master BD Admin</title>
 <link rel="stylesheet" href="<?php echo isset($base_path) ? $base_path : ''; ?>includes/style.css"/>
 </head><body>
+
 <div class="layout">
 <aside class="sidebar">
+
   <div class="sidebar-logo">
     <div class="logo-icon">🔧</div>
     <div class="logo-text">
@@ -30,20 +34,59 @@ $pending_orders= (int)$conn->query("SELECT COUNT(*) AS c FROM orders WHERE statu
       <div class="tagline">Admin Panel</div>
     </div>
   </div>
+
+  <!-- ── Overview ── -->
   <div class="nav-section">Overview</div>
-  <a href="<?php echo isset($base_path) ? $base_path : ''; ?>dashboard.php"  class="nav-item <?= $active_nav==='dashboard'  ?'active':'' ?>"><span class="nav-icon">📊</span> Dashboard</a>
+  <a href="<?php echo isset($base_path) ? $base_path : ''; ?>dashboard.php"
+     class="nav-item <?= $active_nav==='dashboard' ? 'active' : '' ?>">
+    <span class="nav-icon">📊</span> Dashboard
+  </a>
+
+  <!-- ── Inventory ── -->
   <div class="nav-section">Inventory</div>
-  <a href="<?php echo isset($base_path) ? $base_path : ''; ?>products.php"   class="nav-item <?= $active_nav==='products'   ?'active':'' ?>">
+  <a href="<?php echo isset($base_path) ? $base_path : ''; ?>products.php"
+     class="nav-item <?= $active_nav==='products' ? 'active' : '' ?>">
     <span class="nav-icon">📦</span> Products
-    <?php if ($low_stock>0): ?><span class="nav-badge"><?= $low_stock ?></span><?php endif; ?>
+    <?php if ($low_stock > 0): ?><span class="nav-badge"><?= $low_stock ?></span><?php endif; ?>
   </a>
-  <a href="<?php echo isset($base_path) ? $base_path : ''; ?>add_product.php" class="nav-item <?= $active_nav==='add_product'?'active':'' ?>"><span class="nav-icon">➕</span> Add Product</a>
+  <a href="<?php echo isset($base_path) ? $base_path : ''; ?>add_product.php"
+     class="nav-item <?= $active_nav==='add_product' ? 'active' : '' ?>">
+    <span class="nav-icon">➕</span> Add Product
+  </a>
+
+  <!-- ── Commerce ── -->
   <div class="nav-section">Commerce</div>
-  <a href="/inventory_project/admin/orders.php"     class="nav-item <?= $active_nav==='orders'     ?'active':'' ?>">
+  <a href="/inventory_project/admin/orders.php"
+     class="nav-item <?= $active_nav==='orders' ? 'active' : '' ?>">
     <span class="nav-icon">🧾</span> Orders
-    <?php if ($pending_orders>0): ?><span class="nav-badge"><?= $pending_orders ?></span><?php endif; ?>
+    <?php if ($pending_orders > 0): ?><span class="nav-badge"><?= $pending_orders ?></span><?php endif; ?>
   </a>
-  <a href="<?php echo isset($base_path) ? $base_path : ''; ?>customers.php"  class="nav-item <?= $active_nav==='customers'  ?'active':'' ?>"><span class="nav-icon">👥</span> Customers</a>
+  <a href="<?php echo isset($base_path) ? $base_path : ''; ?>customers.php"
+     class="nav-item <?= $active_nav==='customers' ? 'active' : '' ?>">
+    <span class="nav-icon">🧑‍🤝‍🧑</span> Customers
+  </a>
+
+  <!-- ── Reports ── NEW SECTION -->
+  <div class="nav-section">Reports</div>
+  <a href="/inventory_project/reports/sales_report.php"
+     class="nav-item <?= $active_nav==='reports_sales' ? 'active' : '' ?>">
+    <span class="nav-icon">📈</span> Sales Report
+  </a>
+  <a href="/inventory_project/reports/inventory_report.php"
+     class="nav-item <?= $active_nav==='reports_inventory' ? 'active' : '' ?>">
+    <span class="nav-icon">📋</span> Inventory Report
+  </a>
+
+  <!-- ── System ── NEW SECTION (admin only) -->
+  <?php if ($user_role === 'admin'): ?>
+  <div class="nav-section">System</div>
+  <a href="/inventory_project/admin/users.php"
+     class="nav-item <?= $active_nav==='users' ? 'active' : '' ?>">
+    <span class="nav-icon">👥</span> Users
+  </a>
+  <?php endif; ?>
+
+  <!-- ── Footer / user chip ── -->
   <div class="sidebar-footer">
     <div class="user-chip">
       <div class="user-avatar"><?= htmlspecialchars($initials) ?></div>
@@ -54,7 +97,9 @@ $pending_orders= (int)$conn->query("SELECT COUNT(*) AS c FROM orders WHERE statu
       <a href="logout.php" class="logout-link" title="Sign out">⏻</a>
     </div>
   </div>
+
 </aside>
+
 <div class="main">
   <div class="topbar">
     <div>
@@ -65,24 +110,20 @@ $pending_orders= (int)$conn->query("SELECT COUNT(*) AS c FROM orders WHERE statu
       <span class="date-chip" id="admin-date-chip">📅 <?= date('D, d M Y') ?></span>
     </div>
   </div>
+
   <script>
-    function updateAdminDate() {
-      const el = document.getElementById('admin-date-chip');
-      if (!el) return;
-      const now = new Date();
-      const options = {
-        weekday: 'short',
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: true
-      };
-      el.textContent = '📅 ' + new Intl.DateTimeFormat('en-US', options).format(now);
-    }
-    updateAdminDate();
-    setInterval(updateAdminDate, 1000);
+  function updateAdminDate() {
+    const el = document.getElementById('admin-date-chip');
+    if (!el) return;
+    const now = new Date();
+    const options = {
+      weekday: 'short', day: '2-digit', month: 'short', year: 'numeric',
+      hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true
+    };
+    el.textContent = '📅 ' + new Intl.DateTimeFormat('en-US', options).format(now);
+  }
+  updateAdminDate();
+  setInterval(updateAdminDate, 1000);
   </script>
+
   <div class="content">
