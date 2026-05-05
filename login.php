@@ -17,6 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bind_param("s",$email); $stmt->execute();
         $user = $stmt->get_result()->fetch_assoc(); $stmt->close();
         if ($user && password_verify($pass, $user['password'])) {
+          
             $_SESSION['user_id']=$user['id']; $_SESSION['user_name']=$user['name']; $_SESSION['user_role']=$user['role'];
             session_regenerate_id(true);
             header("Location: dashboard.php"); exit;

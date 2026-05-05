@@ -3,6 +3,7 @@
 // Requires: $page_title, $active_nav
 
 session_start();
+
 if (!isset($_SESSION['user_id'])) { header("Location: login.php"); exit; }
 
 require_once (isset($base_path) ? $base_path : '') . 'db.php';
@@ -56,7 +57,7 @@ $pending_orders= (int)$conn->query("SELECT COUNT(*) AS c FROM orders WHERE statu
 
   <!-- ── Commerce ── -->
   <div class="nav-section">Commerce</div>
-  <a href="/inventory_project/admin/orders.php"
+  <a href="<?php echo isset($base_path) ? $base_path : ''; ?>orders.php"
      class="nav-item <?= $active_nav==='orders' ? 'active' : '' ?>">
     <span class="nav-icon">🧾</span> Orders
     <?php if ($pending_orders > 0): ?><span class="nav-badge"><?= $pending_orders ?></span><?php endif; ?>
@@ -66,21 +67,21 @@ $pending_orders= (int)$conn->query("SELECT COUNT(*) AS c FROM orders WHERE statu
     <span class="nav-icon">🧑‍🤝‍🧑</span> Customers
   </a>
 
-  <!-- ── Reports ── NEW SECTION -->
+  <!-- ── Reports ── -->
   <div class="nav-section">Reports</div>
-  <a href="/inventory_project/reports/sales_report.php"
+  <a href="<?php echo isset($base_path) ? $base_path : ''; ?>reports/sales_report.php"
      class="nav-item <?= $active_nav==='reports_sales' ? 'active' : '' ?>">
     <span class="nav-icon">📈</span> Sales Report
   </a>
-  <a href="/inventory_project/reports/inventory_report.php"
+  <a href="<?php echo isset($base_path) ? $base_path : ''; ?>reports/inventory_report.php"
      class="nav-item <?= $active_nav==='reports_inventory' ? 'active' : '' ?>">
     <span class="nav-icon">📋</span> Inventory Report
   </a>
 
-  <!-- ── System ── NEW SECTION (admin only) -->
+  <!-- ── System ── (admin only) -->
   <?php if ($user_role === 'admin'): ?>
   <div class="nav-section">System</div>
-  <a href="/inventory_project/admin/users.php"
+  <a href="<?php echo isset($base_path) ? $base_path : ''; ?>admin/users.php"
      class="nav-item <?= $active_nav==='users' ? 'active' : '' ?>">
     <span class="nav-icon">👥</span> Users
   </a>
@@ -94,7 +95,7 @@ $pending_orders= (int)$conn->query("SELECT COUNT(*) AS c FROM orders WHERE statu
         <div class="uname"><?= htmlspecialchars($user_name) ?></div>
         <div class="urole"><?= ucfirst(htmlspecialchars($user_role)) ?></div>
       </div>
-      <a href="logout.php" class="logout-link" title="Sign out">⏻</a>
+      <a href="<?php echo isset($base_path) ? $base_path : ''; ?>logout.php" class="logout-link" title="Sign out">⏻</a>
     </div>
   </div>
 
@@ -127,3 +128,4 @@ $pending_orders= (int)$conn->query("SELECT COUNT(*) AS c FROM orders WHERE statu
   </script>
 
   <div class="content">
+    

@@ -1,4 +1,5 @@
 <?php
+
 $base_path = '../';
 $page_title='Orders'; $active_nav='orders';
 require '../layout.php';
@@ -28,7 +29,25 @@ function sb($s){$m=['pending'=>'b-amber','completed'=>'b-blue','delivered'=>'b-g
 function step($status){$steps=['pending'=>1,'completed'=>2,'delivered'=>3,'cancelled'=>0];return$steps[$status]??0;}
 ?>
 
-<div style="margin-bottom:20px"><h2 style="font-size:20px;font-weight:800">📦 All Orders</h2></div>
+<div style="margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+
+  <h2 style="font-size:20px;font-weight:800">📦 All Orders</h2>
+
+  <a href="<?= $base_path ?>admin/take_order.php"
+     style="
+        padding:8px 14px;
+        background:var(--accent);
+        color:#fff;
+        border-radius:8px;
+        font-size:13px;
+        font-weight:600;
+        text-decoration:none;
+        display:inline-block;
+     ">
+     ➕ Take Order
+  </a>
+
+</div>
 
 <?php if(isset($_GET['updated'])):?>
 <div class="alert alert-success" style="font-size:15px">

@@ -1,4 +1,5 @@
 <?php
+
 $page_title='Products'; $active_nav='products';
 require 'layout.php';
 
