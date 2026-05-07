@@ -1,12 +1,15 @@
 <?php
+session_start();
 if (isset($_SESSION['user_id'])) {
     $page_title='Orders'; $active_nav='orders';
     require 'layout.php';
     $is_admin = true;
-} else {
+} elseif (isset($_SESSION['customer_id'])) {
     $active_page='orders'; $page_title='My Orders';
     require 'nav.php';
     $is_admin = false;
+} else {
+    header("Location: login.php"); exit;
 }
 
 $success_order = $_GET['order'] ?? '';
@@ -31,7 +34,12 @@ function step($status){$steps=['pending'=>1,'completed'=>2,'delivered'=>3,'cance
 </div>
 <?php endif;?>
 
-<div style="margin-bottom:20px"><h2 style="font-size:20px;font-weight:800">📦 My Orders</h2></div>
+<div style="margin-bottom:20px;display:flex;justify-content:space-between;align-items:center">
+  <h2 style="font-size:20px;font-weight:800"><?= $is_admin ? '📦 All Orders' : '📦 My Orders' ?></h2>
+  <?php if($is_admin): ?>
+  <a href="take_order.php" class="btn btn-primary">➕ Take Order</a>
+  <?php endif; ?>
+</div>
 
 <?php if($orders->num_rows>0):?>
 <div style="display:flex;flex-direction:column;gap:16px">

@@ -1,8 +1,7 @@
 <?php
-$base_path = '../';
 $page_title = 'Sales Report';
-$active_nav = 'reports_sales';
-require $base_path . 'layout.php';
+$active_nav = 'sales_report';
+require 'layout.php';
 
 $orders = $conn->query("SELECT o.order_no, o.customer_name, o.total_price, o.status, o.created_at FROM orders o ORDER BY o.created_at DESC");
 $total_revenue = (float)$conn->query("SELECT SUM(total_price) AS r FROM orders WHERE status IN('completed','delivered')")->fetch_assoc()['r'];

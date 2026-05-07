@@ -1,8 +1,7 @@
 <?php
-$base_path = '../';
 $page_title = 'Inventory Report';
-$active_nav = 'reports_inventory';
-require $base_path . 'layout.php';
+$active_nav = 'inventory_report';
+require 'layout.php';
 
 $products      = $conn->query("SELECT * FROM products ORDER BY quantity ASC");
 $total_products= (int)$conn->query("SELECT COUNT(*) AS c FROM products")->fetch_assoc()['c'];
@@ -19,7 +18,7 @@ $inv_value     = (float)$conn->query("SELECT SUM(price*quantity) AS v FROM produ
 </div>
 
 <div class="card">
-  <div class="card-header"><h3>📋 All Products</h3><a href="<?= $base_path ?>add_product.php" class="btn btn-sm btn-primary">+ Add Product</a></div>
+  <div class="card-header"><h3>📋 All Products</h3></div>
   <div class="tbl-wrap"><table>
     <thead><tr><th>Name</th><th>Category</th><th>Price</th><th>Qty</th><th>Min Qty</th><th>Status</th></tr></thead>
     <tbody>

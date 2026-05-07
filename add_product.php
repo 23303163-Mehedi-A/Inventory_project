@@ -2,6 +2,12 @@
 $page_title='Add Product'; $active_nav='add_product';
 require 'layout.php';
 
+// ── STAFF GUARD ──────────────────────────────────────────────────────────────
+if ($user_role === 'staff') {
+    header("Location: orders.php"); exit;
+}
+// ─────────────────────────────────────────────────────────────────────────────
+
 $msg=$err='';
 $form=['name'=>'','category'=>'','price'=>'','quantity'=>'','min_qty'=>'5','supplier'=>'','description'=>'','image_url'=>''];
 
@@ -33,7 +39,6 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
                 }
             }
         }
-
         if (!$err) {
             $s=$conn->prepare("INSERT INTO products (name,category,price,quantity,min_qty,supplier,description,image_url) VALUES(?,?,?,?,?,?,?,?)");
             $pr=(float)$form['price'];$qty=(int)$form['quantity'];$mq=(int)$form['min_qty'];
@@ -44,6 +49,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
     }
 }
 ?>
+
 <div class="page-header"><h2>➕ Add Product</h2><a href="products.php" class="btn btn-ghost">← Back</a></div>
 <?php if($msg):?><div class="alert alert-success">✅ <?=$msg?> <a href="products.php">View all →</a></div><?php endif;?>
 <?php if($err):?><div class="alert alert-danger">⚠️ <?=htmlspecialchars($err)?></div><?php endif;?>
@@ -64,5 +70,6 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
     <div class="form-actions"><a href="products.php" class="btn btn-ghost">Cancel</a><button type="submit" class="btn btn-primary">➕ Add Product</button></div>
   </form>
 </div>
-  </div></div></div>
+
+</div></div></div>
 </body></html>
