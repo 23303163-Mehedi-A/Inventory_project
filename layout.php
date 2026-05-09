@@ -22,6 +22,13 @@ $pending_orders = (int)$conn->query("SELECT COUNT(*) AS c FROM orders WHERE stat
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title><?= htmlspecialchars($page_title) ?> — Tool Master BD Admin</title>
 <link rel="stylesheet" href="<?php echo isset($base_path) ? $base_path : ''; ?>includes/style.css"/>
+<style>
+.topbar{background:linear-gradient(90deg,#001f3f,#003366) !important;}
+.topbar h1{color:#ffffff !important;}
+.topbar .sub{color:rgba(255,255,255,0.7) !important;}
+.date-chip{background:rgba(255,255,255,0.15) !important;color:#ffffff !important;}
+.main{height:100vh;overflow-y:auto;}
+</style>
 </head><body>
 <div class="layout">
   <aside class="sidebar">
