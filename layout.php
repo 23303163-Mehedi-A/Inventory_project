@@ -106,7 +106,7 @@ $pending_orders = (int)$conn->query("SELECT COUNT(*) AS c FROM orders WHERE stat
           <div class="uname"><?= htmlspecialchars($user_name) ?></div>
           <div class="urole"><?= ucfirst(htmlspecialchars($user_role)) ?></div>
         </div>
-        <a href="logout.php" class="logout-link" title="Sign out">⏻</a>
+        <a href="logout.php" class="logout-link" title="Sign out">⏻ Logout</a>
       </div>
     </div>
   </aside>
